@@ -37,16 +37,20 @@ def get_tld(domain: str):
     Extracts the Top Level Domain (TLD) from a domain string and returns it.
     """
 
-    pass
+    domain_split = domain.split(".")
+    tld = domain_split[-1]
+    return tld
 
 
 def get_sld(domain: str):
 
     """
-    
+    Extracts the Second Level Domain (SLD) from a domain string and returns it.
     """
 
-    pass
+    domain_split = domain.split(".")
+    sld = domain_split[-2]
+    return sld
 
 
 def shannon_entropy(s: str):
