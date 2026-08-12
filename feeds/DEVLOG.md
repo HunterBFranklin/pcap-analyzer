@@ -1,7 +1,9 @@
 # Development Log (most recent first)
 
-My goal with this devlog is to show full authorship of this project in the AI age of coding.
+My goal with this devlog is to show full authorship of this project in the age of AI coding.
 
+
+**Aug. 11, 2026 - 1:** Didn't have much time today. Only completed my psuedocode and logic for shannon_entropy(). This function will be used to test the randomness of a string to see if a DGA was used. I wasn't familiar with the formula, so I had to look it up. I'll add the source in my README. Tomorrow I plan to complete dns_anomaly.py fully and move on to threat_intel.py.
 
 **Aug. 10, 2026 - 1:** Completed the implementation for get_sld() and get_tld() for the TLD blocklist check for analyze_dns().
 

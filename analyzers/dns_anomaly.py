@@ -2,7 +2,7 @@
 # pcap-analyzer — dns_anomaly.py
 # GitHub Repo : github.com/HunterBFranklin/pcap-analyzer
 # Created     : Aug. 7, 2026
-# Modified    : Aug. 8, 2026
+# Modified    : Aug. 11, 2026
 # =============================================================================
 
 from scapy.all import *
@@ -56,10 +56,23 @@ def get_sld(domain: str):
 def shannon_entropy(s: str):
 
     """
-    
+    Computes the Shannon entropy of a string in bits. Higher values indicate more
+    randomness, which can be used to detect Domain Generation Algorithm (DGA)
+    activity.
     """
 
-    pass
+    if s is None:
+        return 0
+
+    string_length = len(s)
+    string_count = Counter(s)
+    entropy = 0
+
+    for value in string_count.values():
+        p_c = value / string_length
+        entropy += p_c * log2(p_c)
+
+    return -entropy
 
 
 def is_rare_tld(tld: str, blocklist: set):
