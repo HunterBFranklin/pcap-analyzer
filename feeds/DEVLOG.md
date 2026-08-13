@@ -2,6 +2,7 @@
 
 My goal with this devlog is to show full authorship of this project in the age of AI coding.
 
+**Aug. 12, 2026 - 1:** Didn't end up contributing to the project today so I decided to fill in protions of the README.md file. I will need to write in my short essay on why I created the tool and add what I learned after I complete it.
 
 **Aug. 11, 2026 - 1:** Didn't have much time today. Only completed my psuedocode and logic for shannon_entropy(). This function will be used to test the randomness of a string to see if a DGA was used. I wasn't familiar with the formula, so I had to look it up. I'll add the source in my README. Tomorrow I plan to complete dns_anomaly.py fully and move on to threat_intel.py.
 
