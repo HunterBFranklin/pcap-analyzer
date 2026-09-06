@@ -4,7 +4,7 @@ A Python command-line tool for behavioral network traffic analysis and anomaly d
 
 ## Authorship
 
-This project was built incrementally and documented throughout; an effort to demonstrate full authorship in an age where AI-generated code is increasingly common. A [development log](DEVLOG.md) captures dated build decisions and dead ends as they happened, an [architecture log](ARCHITECTURE.md) records major design choices and their reasoning, and a [notes file](NOTES.md) preserves inner dialog during active development. These files exist as a record of the build process, not a summary written after the fact.
+This project was built incrementally and documented throughout; an effort to demonstrate full authorship in an age where AI-generated code is increasingly common. A [development log](DEVLOG.md) captures dated build decisions and dead ends as they happened.
 
 ## Why I Created the Tool
 
