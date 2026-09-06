@@ -2,6 +2,10 @@
 
 My goal with this devlog is to show full authorship of this project in the age of AI coding.
 
+**Sep. 5th, 2026 - 1:** Completed the implementation for is_rare_tld() and analyze_dns(). is_rare_tld() currently uses a hardcoded common suspicious list found from abuse.ch, though I do plan to implement it differently later as to make it changing over time. This function acts as a blocklist check to see if the TLD is a common suspicious TLD. analyze_dns() combines all of the functions to create an alert if the shannon entropy (high randomness of domain) or rare tld are found, which shows that a potentially suspicious dns was found. 
+
+**Aug. 24, 2026 - 1:** Took some time to work on other certs and learning paths but now I am back to completing this project. I focused on completing the implementatons for dns_anomaly.py. is_rare_tld() detects the presence of a rare top level domain (known on a TLD blocklist set) that may indicate suspicious behavior/intentions. This is the final check before analyze all aspects of the DNS and DNS resolver. analyze_dns() calls the aforementioned functions and returns alert records for queries that are flagged.
+
 **Aug. 12, 2026 - 1:** Didn't end up contributing to the project today so I decided to fill in protions of the README.md file. I will need to write in my short essay on why I created the tool and add what I learned after I complete it.
 
 **Aug. 11, 2026 - 1:** Didn't have much time today. Only completed my psuedocode and logic for shannon_entropy(). This function will be used to test the randomness of a string to see if a DGA was used. I wasn't familiar with the formula, so I had to look it up. I'll add the source in my README. Tomorrow I plan to complete dns_anomaly.py fully and move on to threat_intel.py.
