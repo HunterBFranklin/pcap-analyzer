@@ -2,6 +2,10 @@
 
 My goal with this devlog is to show full authorship of this project in the age of AI coding.
 
+**Sep. 6th, 2026 - 2:**
+
+**Sep. 6th, 2026 - 1:** After completing dns_anomaly.py, I wanted to make a simple test, similar to beaconing.py and ingestor.py. I made a test with the sample malware pcap file, and ran it through analyze_dns(). I found that it correctly identified a suspicious dns and provided a full report per the parameters I added to analyze_dns() alerts. I will now be moving into threat_intel.py now that I've found analyze_dns() and dns_anomaly.py are working as expected.
+
 **Sep. 5th, 2026 - 1:** Completed the implementation for is_rare_tld() and analyze_dns(). is_rare_tld() currently uses a hardcoded common suspicious list found from abuse.ch, though I do plan to implement it differently later as to make it changing over time. This function acts as a blocklist check to see if the TLD is a common suspicious TLD. analyze_dns() combines all of the functions to create an alert if the shannon entropy (high randomness of domain) or rare tld are found, which shows that a potentially suspicious dns was found. 
 
 **Aug. 24, 2026 - 1:** Took some time to work on other certs and learning paths but now I am back to completing this project. I focused on completing the implementatons for dns_anomaly.py. is_rare_tld() detects the presence of a rare top level domain (known on a TLD blocklist set) that may indicate suspicious behavior/intentions. This is the final check before analyze all aspects of the DNS and DNS resolver. analyze_dns() calls the aforementioned functions and returns alert records for queries that are flagged.
