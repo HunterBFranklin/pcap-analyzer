@@ -8,7 +8,9 @@ This project was built incrementally and documented throughout; an effort to dem
 
 ## Why I Created the Tool
 
-[To be added]
+This project is the culmination of my continued learning in network analysis and in gaining more familiarity with Wireshark and its use cases. Oregon State’s CS 372 course opened my eyes to network analysis, and I’ve developed a strong interest in data, network protection, and network sniffing. As I’ve done more research on common cybersecurity tools and have started to understand all that goes into creating an informative SIEM tool, I wanted to start creating the underlying services for my SIEM: [HelmSIEM](https://github.com/HunterBFranklin/HelmSIEM). For this program, which is to be expanded, I opted to create my own network analysis tool instead of using a `zeek` API or `suricata`. Understanding that it would be harder to build every portion, I still wanted to create every aspect of the SIEM. Currently, HelmSIEM uses a Wazuh agent and an Elasticsearch/Logstash/Kibana (ELK) stack, and now this network analysis tool will be integrated. In addition, I had also heard of `scapy` and wanted to create a program that implemented it. My development log [DEVLOG.md] shows the process of troubleshooting and decision-making. In its current state, this tool can be used on pre-captured .pcap files (network packet capture) or on live network interface ports such as en0, en4, utun0, etc. I will be adding many features to get it more aligned with the functionality needed for HelmSIEM.
+
+Let me dive into the build specifics, including how it’s used and what it provides for the user.
 
 ## Use Cases
  
@@ -114,7 +116,11 @@ pcap-analyzer/
 
 ## What I Learned Building This
 
-[To be added]
+Here are some highlights of what I learned:
+- **`scapy` outputs Decimal / EDecimal which can’t directly be serialized by Python’s JSON library.** This meant that I needed to create a class to encode the `scapy` output and convert it to float for JSON use.
+- **`sudo` is only needed on live capture (via en0, utun0, etc.), not general capture of .pcap files.** This only really led to needing to change my READMe as functionality remained the same.
+- **A VPN, network firewall/proxy, and network-level DoH largely impact the output of this program, as expected.** In testing all functionalities and outputs of the program, as expected, outputs ranged in quality as different services enabled changed output drastically. Disabling my VPN started to show some signs of life from live catpure, but I truly saw full captures at a live packet capture count of 10,000-25,000 and with all network protections disabled temporarily.
+- **Python libraries `ssl` and `certifi` are needed for proper connection when downloading `threat_intel` feed files.** I learned this when troubleshooting why the feed files weren’t downloading while using test_threat.py.
 
 ## References
 
