@@ -127,8 +127,8 @@ def analyze_threat_intel(flows: dict, ip_blocklist: set, domain_blocklist: set):
                 'protocol': flow[4],
                 'feed_source': source,
                 'severity': "critical",
-                'MITRE_technique': "T1071",
-                'MITRE_tactic': "TA0011: Command and Control (C2)"
+                'mitre_technique': "T1071",
+                'mitre_tactic': "TA0011: Command and Control (C2)"
             }
             alerts.append(alert)
         
