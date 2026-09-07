@@ -35,20 +35,20 @@ Each alert includes a severity rating, MITRE ATT&CK technique mapping, and detec
 ## Usage
  
 ```bash
-# Analyze a saved pcap file
-sudo python3 main.py --pcap capture.pcap --output results.json
+# Analyze a saved pcap file and save it to a new JSON file
+python3 main.py --pcap capture.pcap --output results.json
  
-# Live capture on eth0
-sudo python3 main.py --live --iface eth0 --output results.json
+# Live capture on en0 and save it to a new JSON file
+sudo python3 main.py --live --iface en0 --output results.json
  
-# Adjust detection thresholds
-sudo python3 main.py --pcap capture.pcap --cv-threshold 0.15 --min-packets 8 --entropy-threshold 3.8
+# Analyze pcap and output on stdout, adjusting detection thresholds
+python3 main.py --pcap capture.pcap --cv-threshold 0.15 --min-packets 8 --entropy-threshold 3.8
  
 # Force refresh threat intel feeds
-sudo python3 main.py --pcap capture.pcap --refresh
+python3 main.py --pcap capture.pcap --refresh
  
 # Filter live capture to DNS traffic only
-sudo python3 main.py --live --iface eth0 --filter "port 53"
+sudo python3 main.py --live --iface en0 --filter "port 53"
 ```
 
 ## CLI Flags
@@ -57,13 +57,15 @@ sudo python3 main.py --live --iface eth0 --filter "port 53"
 |---|---|---|---|
 | `--pcap` | str | — | Path to a .pcap file for offline analysis |
 | `--live` | bool | False | Enable live capture mode |
-| `--iface` | str | — | Network interface for live capture (e.g. eth0) |
+| `--packet-count` | int | 0 | Number of packets to capture in live mode |
+| `--iface` | str | — | Network interface for live capture (e.g. en0, en4, en7) |
 | `--output` | str | stdout | Path to write JSON results |
 | `--refresh` | bool | False | Force re-download of threat intel feeds |
 | `--filter` | str | — | Berkeley Packet Filter (BPF) expression |
 | `--min-packets` | int | 10 | Minimum packet count per flow for beaconing analysis |
 | `--cv-threshold` | float | 0.2 | CV cutoff for beaconing detection |
 | `--entropy-threshold` | float | 3.5 | Shannon entropy cutoff for DNS anomaly detection |
+| `--feeds-dir` | str | ./feeds | Directory to cache threat intelligence feeds |
 
 ## My Dependencies
  
@@ -78,18 +80,27 @@ Requires `sudo` for live capture mode (raw socket access).
 ## Project Structure
  
 ```
-pcap-sentinel/
+pcap-analyzer/
 ├── main.py                  # CLI entry point
 ├── ingestor.py              # Pcap reading, live capture, flow extraction
 ├── output.py                # JSON and stdout formatting
 ├── analyzers/
+│   ├── __init__.py          # Blank; import bugs and package support
 │   ├── beaconing.py         # Inter-arrival time and CV analysis
 │   ├── dns_anomaly.py       # TLD blocklist and Shannon entropy scoring
 │   └── threat_intel.py      # Feed loading, caching, and IOC matching
 ├── feeds/                   # Cached threat intelligence files
+│   ├── feodo_up.txt         # Abuse.ch feodotracker for C2 IP blocklist
+│   └── urlhaus_domains.csv  # Abuse.ch URLhaus for domain blocklist
+├── tests/
+│   ├── test_ingestor.py     # ingestor.py functionality test
+│   ├── test_beaconing.py    # beaconing.py functionality test
+│   ├── test_dns.py          # dns_anomaly.py funcationality test
+│   └── test_threat.py       # threat_intel.py functionality test
+├── sample.pcap              # Sample normal traffic trace
+├── malware.pcap             # Sample malware traffic trace
 ├── ARCHITECTURE.md          # Design decisions and system overview
-├── DEVLOG.md                # Build journal
-└── NOTES.md                 # Development scratch pad
+└── DEVLOG.md                # Build journal
 ```
 
 ## MITRE ATT&CK Mapping
