@@ -8,11 +8,23 @@
 import json
 import sys
 import datetime
+from decimal import Decimal
+
+class DecimalEncoder(json.JSONEncoder):
+
+    """
+    Custom JSON encoder to handle Scapy's EDecimal/Decimal timestamp types.
+    """
+
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return super().default(obj)
 
 def build_alert(detection_type: str, src_ip: str, dst_ip: str, severity: str, detail: dict):
 
     """
-    Builds and alert with the timestamp, detection type, source and dest. IP, severity,
+    Builds an alert with the timestamp, detection type, source and dest. IP, severity,
     MITRE technique and tactic, and provides more specific detail.
     """
 
@@ -31,21 +43,21 @@ def build_alert(detection_type: str, src_ip: str, dst_ip: str, severity: str, de
 def write_json(alerts: list, output_path: str | None):
 
     """
-    Serializes the alerts list to JSON and write to a file if output_path is provided,
-    otherwise prints formatted JSON to stdout.
+    Serializes the alerts list to JSON and writes to a file if output_path is provided,
+    otherwise prints formatted JSON to stdout. Uses DecimalEncoder to handle EDecimal types.
     """
 
     if output_path:
         with open(output_path, "w") as f:
-            json.dump(alerts, f, indent=2)
+            json.dump(alerts, f, indent=2, cls=DecimalEncoder)
     else:
-        print(json.dumps(alerts, indent=2))
+        print(json.dumps(alerts, indent=2, cls=DecimalEncoder))
 
 
 def print_summary(alerts: list, flows_analyzed: int, output_path: str | None):
 
     """
-    Prints a human-readable summary of the analysis run showingflow count, alerts counts, 
+    Prints a human-readable summary of the analysis run showing flow count, alert counts, 
     by detection type, total alerts, and output path.
     """
 
