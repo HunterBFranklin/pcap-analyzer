@@ -2,7 +2,7 @@
 
 My goal with this devlog is to show full authorship of this project in the age of AI coding.
 
-**Sep. 6th, 2026 - 2:**
+**Sep. 6th, 2026 - 2:** threat_intel.py went pretty smoothly all things considered. I ran into some hurdles with indexing properly with the URLHaus URL CSV file, had to add in SSL and Certifi for download_feed() to work as I had planned, and had to cover a few edge cases I hadn't considered such as the CSV having some rows with fewer than three columns and it containing non-UTF-8 characters. After that was completed, I wanted to create a test, just as the other files, and this is where I troubleshooted the above issues. I finally got a return of "0" meaning there were no critical alerts for an IP or domain, so I hardcoded a known malicious IP source and it accurately reported the finding following the structure of analyze_threat_intel(). It has been commented out and was only used for validation of a working file. 
 
 **Sep. 6th, 2026 - 1:** After completing dns_anomaly.py, I wanted to make a simple test, similar to beaconing.py and ingestor.py. I made a test with the sample malware pcap file, and ran it through analyze_dns(). I found that it correctly identified a suspicious dns and provided a full report per the parameters I added to analyze_dns() alerts. I will now be moving into threat_intel.py now that I've found analyze_dns() and dns_anomaly.py are working as expected.
 
