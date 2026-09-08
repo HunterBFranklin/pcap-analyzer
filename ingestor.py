@@ -2,11 +2,12 @@
 # pcap-analyzer — ingestor.py
 # GitHub Repo : github.com/HunterBFranklin/pcap-analyzer
 # Created     : Aug. 7, 2026
-# Modified    : Aug. 7, 2026
+# Modified    : Sep. 7, 2026
 # =============================================================================
 
 from scapy.all import *
 from collections import defaultdict
+from datetime import datetime, timezone
 
 def read_pcap(filepath: str):
 
@@ -75,8 +76,6 @@ def parse_packet(packet):
         dst_port = None
         protocol = None
 
-    timestamp = packet.time # Gathers timestamp.
-
     # Output for five-tuple.
     return {
         'src_ip': src_ip,
@@ -84,5 +83,5 @@ def parse_packet(packet):
         'src_port': src_port,
         'dst_port': dst_port,
         'protocol': protocol,
-        'timestamp': timestamp
+        'timestamp': float(packet.time)
     }

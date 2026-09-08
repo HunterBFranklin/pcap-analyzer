@@ -28,8 +28,10 @@ def build_alert(detection_type: str, src_ip: str, dst_ip: str, severity: str, de
     MITRE technique and tactic, and provides more specific detail.
     """
 
+    iso_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='microseconds').replace('+00:00', 'Z')
+
     return {
-        'timestamp': datetime.datetime.utcnow().isoformat() + "Z",
+        'timestamp': iso_timestamp,
         'detection_type': detection_type,
         'src_ip': src_ip,
         'dst_ip': dst_ip,

@@ -8,7 +8,7 @@
 from statistics import stdev, mean
 import datetime
 
-def compute_intervals(timestamps):
+def compute_intervals(timestamps: list[float]):
 
     """
     Computes the difference in arrival time, or intervals, and returns
