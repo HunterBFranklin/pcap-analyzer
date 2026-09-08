@@ -2,14 +2,12 @@
 # pcap-analyzer — dns_anomaly.py
 # GitHub Repo : github.com/HunterBFranklin/pcap-analyzer
 # Created     : Aug. 7, 2026
-# Modified    : Sep. 5, 2026
+# Modified    : Sep. 8, 2026
 # =============================================================================
 
 from scapy.all import *
 from math import log2
 from collections import Counter
-
-SUSPICIOUS_TLDS = {'tk', 'ml', 'ga', 'cf', 'gq', 'xyz', 'top', 'cc', 'su', 'pw', 'ws', 'club', 'online', 'site', 'live'}
 
 def extract_dns_queries(packets):
 
@@ -89,21 +87,29 @@ def is_rare_tld(tld: str, blocklist: set):
     return tld in blocklist
 
 
-def analyze_dns(packets, tld_blocklist: set, entropy_threshold: float):
+def analyze_dns(packets, tld_blocklist: set, entropy_threshold: float, ignored_domains: list = None):
 
     """
     Calls extract_dns_queries, scores each domain with shannon_entropy and is_rare_tld,
     and returns alert records for flagged queries. 
     """
 
+    if ignored_domains is None:
+        ignored_domains = []
+
     alerts = []
     raw_packets = extract_dns_queries(packets)
 
     for packet in raw_packets:
-        tld = get_tld(packet['queried_domain'])
-        sld = get_sld(packet['queried_domain'])
+        domain = packet['queried_domain']
+
+        if any(domain.endswith(suffix) for suffix in ignored_domains):
+            continue
+
+        tld = get_tld(domain)
+        sld = get_sld(domain)
         entropy = shannon_entropy(sld)
-        rare_tld = is_rare_tld(tld, SUSPICIOUS_TLDS)
+        rare_tld = is_rare_tld(tld, tld_blocklist)
 
         if entropy > entropy_threshold or rare_tld is True:
 

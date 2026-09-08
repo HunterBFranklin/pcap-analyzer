@@ -2,7 +2,7 @@
 # pcap-analyzer — threat_intel.py
 # GitHub Repo : github.com/HunterBFranklin/pcap-analyzer
 # Created     : Aug. 7, 2026
-# Modified    : Sep. 6, 2026
+# Modified    : Sep. 7, 2026
 # =============================================================================
 
 import urllib.request
@@ -80,6 +80,25 @@ def parse_domain_feed(filepath: str):
     return domains
 
 
+def parse_tld_feed(filepath: str):
+    """
+    Opens a threat intel TLD blocklist file, skips comment lines beginning with "#",
+    strips whitespace, and returns a set of TLD strings for O(1) lookup.
+    """
+    tlds = set()
+    if not os.path.exists(filepath):
+        return tlds
+        
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            # Remove leading dot if present (e.g., '.zip' -> 'zip')
+            tlds.add(line.lstrip('.').lower())
+    return tlds
+
+
 def load_feeds(feeds_dir: str, force_refresh: bool):
 
     """
@@ -89,10 +108,14 @@ def load_feeds(feeds_dir: str, force_refresh: bool):
     """
 
     os.makedirs(feeds_dir, exist_ok=True)
+    
     feodo_url = "https://feodotracker.abuse.ch/downloads/ipblocklist.txt"
     feodo_path = os.path.join(feeds_dir, "feodo_ip.txt")
+    
     urlhaus_url = "https://urlhaus.abuse.ch/downloads/csv/"
     urlhaus_path = os.path.join(feeds_dir, "urlhaus_domains.csv")
+
+    tld_path = os.path.join(feeds_dir, "suspicious_tlds.txt")
 
     if force_refresh or not os.path.exists(feodo_path) or is_feed_stale(feodo_path, max_age_hours=6):
         download_feed(feodo_url, feodo_path)
@@ -101,8 +124,9 @@ def load_feeds(feeds_dir: str, force_refresh: bool):
 
     feodo_ip = parse_ip_feed(feodo_path)
     urlhaus_domain = parse_domain_feed(urlhaus_path)
+    tld_blocklist = parse_tld_feed(tld_path)
 
-    return (feodo_ip, urlhaus_domain)
+    return (feodo_ip, urlhaus_domain, tld_blocklist)
 
 def analyze_threat_intel(flows: dict, ip_blocklist: set, domain_blocklist: set):
 

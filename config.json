@@ -1,0 +1,12 @@
+{
+  "whitelist": {
+    "subnets": [
+      "10.0.0.0/8",
+      "192.168.1.5"
+    ],
+    "ignored_domains": [
+      "internal.corp",
+      "trusted-updates.com"
+    ]
+  }
+}

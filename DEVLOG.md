@@ -2,6 +2,10 @@
 
 My goal with this devlog is to show full authorship of this project in the age of AI coding.
 
+**Sep. 8, 2026 - 2:** Added an external suspicious_tlds.txt file for external editing, following the IP whitelist and domain ignoring external config idea. Makes it easier to edit.
+
+**Sep. 8, 2026 - 1:** I learned more about the `logging` Python module, thinking that it would be good to include in my next idea of adding a config.json file for external configuration, rather than hardcoded changes such as the domain and IP blocklists. Thus, I added a config.json file for setting ignored domains and specifying subnets to whitelist. Additionally, I created config_loader.py to fully handle IP, subnet, and domain suffixes. This included using `logger.warning` which was new to me. I had just been using `logger.info` previously so that was valuable to figure out. All config_loader.py does essentially is load the configuration file and check for IP whitelist and domain ignoring. 
+
 **Sep. 7, 2026 - 6:** Adding a timestamp to each beaconing alert in beaconing.py via the alerts dictionary output. Figured I should do it for both threat_intel.py output and dns_anomaly.py output as well. I ran into some issues. I hadn't realized that extract_dns_queries() in dns_anomaly.py wasn't grabbing timestamps so I needed to add that to the extracted list output to be able to use it in the output dictionary. Similarly, threat_intel.py needed change by grabbing a flow from flows and grabbing the timestamp from it.
 
 **Sep. 7, 2026 - 5:** I've decided to implement Python's `logging` library for better error handling and to replace raw print statements with more structured logging. Another factor is integration into the SIEM. I'm aiming to standardize now so that it all blends well when calling within an API. This involved creating logger.py to house the function that will be called in main.py. Outputs look much better after introducing both ISO8601 and logging.
