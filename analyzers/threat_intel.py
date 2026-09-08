@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 import os, os.path
 import csv
 import time
+from datetime import datetime, timezone
 
 import ssl
 import certifi
@@ -119,7 +120,13 @@ def analyze_threat_intel(flows: dict, ip_blocklist: set, domain_blocklist: set):
                 source = "feodo_tracker"
             elif flow[1] in domain_blocklist:
                 source = "urlhaus"
+
+            timestamps = flows[flow]
+            last_packet_epoch = timestamps[-1] if timestamps else time.time()
+            alert_timestamp = datetime.fromtimestamp(last_packet_epoch, tz=timezone.utc).isoformat(timespec='microseconds').replace('+00:00', 'Z')
+
             alert = {
+                'timestamp': alert_timestamp,
                 'detection_type': "threat_intel",
                 'src_ip': flow[0],
                 'dst_ip': flow[1],

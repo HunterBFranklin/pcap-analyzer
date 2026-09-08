@@ -6,7 +6,7 @@
 # =============================================================================
 
 from statistics import stdev, mean
-import datetime
+from datetime import datetime, timezone
 
 def compute_intervals(timestamps: list[float]):
 
@@ -83,7 +83,11 @@ def analyze_beaconing(flows: dict, cv_threshold: float, min_packets: int):
             else:
                 severity = "low"
 
+            last_packet_epoch = timestamps[-1]
+            alert_timestamp = datetime.fromtimestamp(last_packet_epoch, tz=timezone.utc).isoformat(timespec='microseconds').replace('+00:00', 'Z')
+
             alert = {
+                'timestamp': alert_timestamp,
                 'detection_type': "beaconing",
                 'src_ip': flow[0],
                 'dst_ip': flow[1],

@@ -9,7 +9,10 @@ import argparse
 import ingestor
 import output
 import traceback
+from logger import get_logger
 from analyzers import beaconing, dns_anomaly, threat_intel
+
+logger = get_logger("pcap-analyzer.main")
 
 def parse_args():
 
@@ -46,30 +49,30 @@ def main():
 
 def main():
     try:
-        print("[DEBUG] Entering main()...")
+        logger.info("Entering main execution pipeline...")
         args = parse_args()
-        print(f"[DEBUG] Arguments parsed successfully.")
+        logger.info("Arguments parsed successfully.")
 
         if args.pcap:
-            print(f"[DEBUG] Reading PCAP file: {args.pcap}")
+            logger.info(f"Reading PCAP file: {args.pcap}")
             packets = ingestor.read_pcap(args.pcap)
         elif args.live:
             bpf_filter = args.filter if args.filter else ""
-            print(f"[DEBUG] Starting live capture on interface {args.iface}...")
+            logger.info(f"Starting live capture on interface {args.iface} with filter '{bpf_filter}'...")
             packets = ingestor.start_live_capture(iface=args.iface, packet_count=args.packet_count, bpf_filter=bpf_filter)
         else:
-            print("[ERROR] Neither --pcap nor --live was specified.")
+            logger.error("Neither --pcap nor --live was specified.")
             return
 
-        print(f"[DEBUG] Loaded {len(packets)} packets. Extracting flows...")
+        logger.info(f"Loaded {len(packets)} packets. Extracting flows...")
         flows = ingestor.extract_flows(packets)
-        print(f"[DEBUG] Extracted {len(flows)} unique flows. Loading threat intel feeds...")
+        logger.info(f"Extracted {len(flows)} unique flows. Loading threat intel feeds...")
 
         ip_blocklist, domain_blocklist = threat_intel.load_feeds(
             feeds_dir=args.feeds_dir,
             force_refresh=args.refresh
         )
-        print(f"[DEBUG] Threat intel loaded. Running analyzers...")
+        logger.info("Threat intel feeds loaded successfully. Running analyzers...")
 
         alerts = []
 
@@ -87,21 +90,20 @@ def main():
         )
         alerts.extend(dns_alerts)
 
-        ti_alerts = threat_intel.analyze_threat_intel(
+        threat_intel_alerts = threat_intel.analyze_threat_intel(
             flows, 
             ip_blocklist=ip_blocklist, 
             domain_blocklist=domain_blocklist
         )
-        alerts.extend(ti_alerts)
+        alerts.extend(threat_intel_alerts)
 
-        print(f"[DEBUG] Analysis complete. Total alerts found: {len(alerts)}. Printing output...")
+        logger.info(f"Analysis complete. Total alerts found: {len(alerts)}. Writing output...")
         output_path = None if args.output == "stdout" else args.output
         output.write_json(alerts, output_path)
         output.print_summary(alerts, len(flows), output_path)
 
     except Exception as e:
-        print("\n[CRITICAL ERROR] An exception occurred during execution:")
-        traceback.print_exc()
+        logger.critical(f"An unhandled exception occurred during execution: {e}", exc_info=True)
 
 if __name__ == "__main__":
     main()

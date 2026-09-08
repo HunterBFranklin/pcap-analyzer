@@ -28,7 +28,9 @@ def extract_dns_queries(packets):
                 src_ip = packet[IP].src
                 queries.append({
                     'src_ip': src_ip, 
-                    'queried_domain': queried_domain})
+                    'queried_domain': queried_domain,
+                    'timestamp': float(packet.time)
+                    })
 
     return queries
 
@@ -117,7 +119,10 @@ def analyze_dns(packets, tld_blocklist: set, entropy_threshold: float):
             elif entropy > entropy_threshold or rare_tld is True:
                 severity = "medium"
 
+            alert_timestamp = datetime.fromtimestamp(packet['timestamp'], tz=timezone.utc).isoformat(timespec='microseconds').replace('+00:00', 'Z')
+
             alert = {
+                    'timestamp': alert_timestamp,
                     'detection_type': "dns_anomaly",
                     'src_ip': packet['src_ip'],
                     'queried_domain': packet['queried_domain'],
