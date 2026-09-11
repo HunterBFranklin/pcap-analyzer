@@ -6,7 +6,11 @@
     ],
     "ignored_domains": [
       "internal.corp",
-      "trusted-updates.com"
+      "trusted-updates.com",
+      "azureedge.net",
+      "googleusercontent.com",
+      "cloudfront.net",
+      "akamaiedge.net"
     ]
   }
 }

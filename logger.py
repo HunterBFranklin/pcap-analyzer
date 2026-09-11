@@ -2,7 +2,7 @@
 # pcap-analyzer — logger.py
 # GitHub Repo : github.com/HunterBFranklin/pcap-analyzer
 # Created     : Sep. 7, 2026
-# Modified    : Sep. 7, 2026
+# Modified    : Sep. 10, 2026
 # =============================================================================
 
 import logging
@@ -11,7 +11,9 @@ import sys
 def get_logger(name: str) -> logging.logger:
 
     """
-    
+    Creates and configures a standardized logger instance that writes strictly 
+    to stderr with ISO 8601 UTC timestamps. Prevents duplicate handlers 
+    if called multiple times for the same logger name.
     """
 
     logger = logging.getLogger(name)

@@ -64,8 +64,8 @@ sudo python3 main.py --live --iface en0 --filter "port 53"
 | `--output` | str | stdout | Path to write JSON results |
 | `--refresh` | bool | False | Force re-download of threat intel feeds |
 | `--filter` | str | — | Berkeley Packet Filter (BPF) expression |
-| `--min-packets` | int | 10 | Minimum packet count per flow for beaconing analysis |
-| `--cv-threshold` | float | 0.2 | CV cutoff for beaconing detection |
+| `--min-packets` | int | 5 | Minimum packet count per flow for beaconing analysis |
+| `--cv-threshold` | float | 0.5 | CV cutoff for beaconing detection |
 | `--entropy-threshold` | float | 3.5 | Shannon entropy cutoff for DNS anomaly detection |
 | `--feeds-dir` | str | ./feeds | Directory to cache threat intelligence feeds |
 
@@ -92,7 +92,7 @@ pcap-analyzer/
 │   ├── dns_anomaly.py       # TLD blocklist and Shannon entropy scoring
 │   └── threat_intel.py      # Feed loading, caching, and IOC matching
 ├── feeds/                   # Cached threat intelligence files
-│   ├── feodo_up.txt         # Abuse.ch feodotracker for C2 IP blocklist
+│   ├── feodo_ip.txt         # Abuse.ch feodotracker for C2 IP blocklist
 │   └── urlhaus_domains.csv  # Abuse.ch URLhaus for domain blocklist
 ├── tests/
 │   ├── test_ingestor.py     # ingestor.py functionality test
