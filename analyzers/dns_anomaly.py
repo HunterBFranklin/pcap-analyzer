@@ -116,7 +116,7 @@ def shannon_entropy(s: str):
         entropy += p_c * log2(p_c)
 
     return -entropy
- 
+
 
 def is_rare_tld(tld: str, blocklist: set):
 
